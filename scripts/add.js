@@ -7,11 +7,29 @@ let courseName = "";
 let checkInProgress;
 
 $(() => {
-    token = readCookie("token");
+    token = readToken();
     if (!token) {
-        window.location.href = 'index.html?redirect=add';
+        //window.location.href = 'index.html?redirect=add';
     }
 });
+
+function readToken() {
+    if(navigator.cookieEnabled) {
+        return readCookie("token");
+    }
+    else {
+        return readSession("token");
+    }
+}
+
+function readSession(name) {
+    name = encodeURIComponent(name);
+    if (localStorage.hasOwnProperty(name)) {
+        return sessionStorage.getItem(name);
+    } else {
+        return null;
+    }
+}
 
 function readCookie(name) {
     name = encodeURIComponent(name) + "=";
